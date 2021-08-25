@@ -2,7 +2,6 @@ package com.kuldeep.intellimedia.ui.adapter
 
 import android.content.Context
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kuldeep.intellimedia.R
 import com.kuldeep.intellimedia.ui.model.TimerModel
 import kotlinx.android.synthetic.main.item_timer_layout.view.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
@@ -28,8 +26,8 @@ class TimerAdapter(
 ) :
     RecyclerView.Adapter<TimerAdapter.ViewHolder>() {
 
-    private var ctx: Context? = context
-    private var timerList: List<TimerModel> = arrayList.toList()
+    var ctx: Context? = context
+    var timerList: List<TimerModel> = arrayList.toList()
     private var mTimerRunning = false
     private var mTimeLeftInMillis: Long? = null
     private var mCountDownTimer: CountDownTimer? = null
@@ -58,11 +56,13 @@ class TimerAdapter(
 
             val clView = itemView.clMain
             with(clView) {
-                /*mTimeLeftInMillis = TimeUnit.SECONDS.toMillis(timerModel.timer!!.toLong())
-                startTimer(txtTimer, position)*/
-                txtTimer.text = timerModel.timer
+                mTimeLeftInMillis = TimeUnit.SECONDS.toMillis(timerModel.timer!!.toLong())
+                if (mCountDownTimer != null) {
+                    mCountDownTimer!!.cancel()
+                }
+                startTimer(txtTimer, position)
                 btnTimer.setOnClickListener {
-                    /*if (mTimerRunning) {
+                    if (mTimerRunning) {
                         btnTimer.text = ctx?.getString(R.string.pause)
                         mTimerRunning = false
                         pauseTimer()
@@ -70,14 +70,14 @@ class TimerAdapter(
                         btnTimer.text = ctx?.getString(R.string.resume)
                         mTimerRunning = true
                         startTimer(txtTimer, position)
-                    }*/
+                    }
                 }
             }
 
         }
     }
 
-    /*private fun updateCountDownText(textView: AppCompatTextView) {
+    private fun updateCountDownText(textView: AppCompatTextView, position: Int) : String{
         val hms = String.format(
             "%02d:%02d:%02d",
             TimeUnit.MILLISECONDS.toHours(mTimeLeftInMillis!!),
@@ -89,14 +89,15 @@ class TimerAdapter(
                 TimeUnit.MILLISECONDS.toMinutes(mTimeLeftInMillis!!)
             )
         )
-        textView.text = hms //set text
-    }*/
 
-    /*private fun startTimer(textView: AppCompatTextView, position: Int) {
+        return hms
+    }
+
+    private fun startTimer(textView: AppCompatTextView, position: Int) {
         mCountDownTimer = object : CountDownTimer(mTimeLeftInMillis!!, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 mTimeLeftInMillis = millisUntilFinished
-                updateCountDownText(textView)
+                textView.text = updateCountDownText(textView, position)
             }
 
             override fun onFinish() {
@@ -110,7 +111,7 @@ class TimerAdapter(
     private fun pauseTimer() {
         mCountDownTimer!!.cancel()
         mTimerRunning = false
-    }*/
+    }
 
 
     fun removeItem(position: Int) {
