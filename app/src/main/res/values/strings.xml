@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Intelli media</string>
+    <string name="start">Start</string>
+    <string name="resume">Resume</string>
+    <string name="pause">Pause</string>
+    <string name="delete">Delete</string>
+    <string name="no_data">No Data found .!</string>
+    <string name="enter_seconds">Enter Seconds</string>
+</resources>
